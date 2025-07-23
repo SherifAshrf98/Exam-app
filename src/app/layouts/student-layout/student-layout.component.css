@@ -1,0 +1,98 @@
+.student-layout {
+  min-height: 100vh;
+  background: #f8f9fb;
+}
+
+.sidebar {
+  width: 220px;
+  background: #fff;
+  border-right: 1px solid #f0f0f0;
+  min-height: 100vh;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+}
+
+.sidebar-logo {
+  font-size: 1.2rem;
+  color: #222;
+}
+
+.sidebar .nav-link {
+  color: #222;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar .nav-link.active, .sidebar .nav-link:focus, .sidebar .nav-link:hover {
+  background: #e8f0fe;
+  color: #1976d2;
+}
+
+.sidebar .nav-link i {
+  font-size: 1.1rem;
+}
+
+.sidebar.fancy-sidebar {
+  background: linear-gradient(135deg, #4f8cff 0%, #3358e6 100%);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+.sidebar .nav-link {
+  color: #fff;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar .nav-link.active, .sidebar .nav-link:focus, .sidebar .nav-link:hover {
+  background: rgba(255,255,255,0.15);
+  color: #ffd700;
+}
+.sidebar-logo img.sidebar-avatar {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.student-header {
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-bottom: 3px solid #4f8cff;
+  border-radius: 0 0 16px 16px;
+}
+.student-header h2 {
+  color: #4f8cff;
+}
+
+.main-area {
+  background: #f8f9fb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-header {
+  min-height: 64px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+  z-index: 10;
+}
+
+.main-content {
+  flex: 1;
+  background: #f8f9fb;
+  padding: 2rem 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 60px;
+    padding: 0.5rem 0.2rem;
+  }
+  .sidebar-logo span {
+    display: none;
+  }
+  .main-content {
+    padding: 1rem 0.5rem;
+  }
+}
