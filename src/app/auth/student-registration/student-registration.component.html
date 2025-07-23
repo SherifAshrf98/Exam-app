@@ -1,0 +1,183 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <!-- Header Section -->
+    <div class="auth-header">
+      <div class="header-icon">
+        <i class="pi pi-graduation-cap"></i>
+      </div>
+      <h2> Registration</h2>
+      <p>Create your account to access examinations</p>
+    </div>
+
+    <!-- Form Section -->
+    <div class="auth-form">
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <div class="input-group">
+                <span class="input-icon">
+                  <i class="pi pi-user"></i>
+                </span>
+                <input 
+                  type="text" 
+                  id="firstName" 
+                  formControlName="firstName"
+                  class="form-control" 
+                  placeholder="John"
+                />
+              </div>
+              @if (registrationForm.get('firstName')?.invalid && registrationForm.get('firstName')?.touched) {
+                <div class="error-message">
+                  First name is required
+                </div>
+              }
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <div class="input-group">
+                <span class="input-icon">
+                  <i class="pi pi-user"></i>
+                </span>
+                <input 
+                  type="text" 
+                  id="lastName" 
+                  formControlName="lastName"
+                  class="form-control" 
+                  placeholder="Doe"
+                />
+              </div>
+              @if (registrationForm.get('lastName')?.invalid && registrationForm.get('lastName')?.touched) {
+                <div class="error-message">
+                  Last name is required
+                </div>
+              }
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <div class="input-group">
+                <span class="input-icon">
+                  <i class="pi pi-user"></i>
+                </span>
+                <input 
+                  type="text" 
+                  id="username" 
+                  formControlName="username"
+                  class="form-control" 
+                  placeholder="yourusername"
+                />
+              </div>
+              @if (registrationForm.get('username')?.invalid && registrationForm.get('username')?.touched) {
+                <div class="error-message">
+                  Username is required (min 3 characters)
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-group">
+            <span class="input-icon">
+              <i class="pi pi-envelope"></i>
+            </span>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email"
+              class="form-control" 
+              placeholder="john.doe@example.com"
+            />
+          </div>
+          @if (registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched) {
+            <div class="error-message">
+              Please enter a valid email address
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-group">
+            <span class="input-icon">
+              <i class="pi pi-lock"></i>
+            </span>
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              id="password" 
+              formControlName="password"
+              class="form-control" 
+              placeholder="Create a strong password"
+            />
+            <span class="input-icon password-toggle" (click)="togglePassword()">
+              <i [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </span>
+          </div>
+          @if (registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched) {
+            <div class="error-message">
+              Password must be at least 6 characters , contain uppercase, lowercase, and a special character.
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-group">
+            <span class="input-icon">
+              <i class="pi pi-lock"></i>
+            </span>
+            <input 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              id="confirmPassword" 
+              formControlName="confirmPassword"
+              class="form-control" 
+              placeholder="Confirm your password"
+            />
+            <span class="input-icon password-toggle" (click)="toggleConfirmPassword()">
+              <i [class]="showConfirmPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </span>
+          </div>
+          @if (registrationForm.get('confirmPassword')?.invalid && registrationForm.get('confirmPassword')?.touched) {
+            <div class="error-message">
+              Passwords do not match
+            </div>
+          }
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="registrationForm.invalid || isLoading">
+          Create Account
+          @if (isLoading) { <span class="spinner-border spinner-border-sm ms-2"></span> }
+        </button>
+      </form>
+
+      @if (isLoading) {
+        <div class="alert alert-info mt-3">Registering...</div>
+      }
+      @if (apiSuccess) {
+        <div class="alert alert-success mt-3">
+          <i class="pi pi-check-circle"></i> {{ apiSuccess }}
+        </div>
+      }
+      @if (apiError) {
+        <div class="alert alert-danger mt-3">
+          <i class="pi pi-exclamation-triangle"></i>
+          <ul class="mb-0">
+            @for (msg of apiError; track msg) {
+              <li>{{ msg }}</li>
+            }
+          </ul>
+        </div>
+      }
+
+      <div class="auth-footer">
+        <p>Already have an account? <a routerLink="/">Sign in here</a></p>
+      </div>
+    </div>
+  </div>
+</div>
