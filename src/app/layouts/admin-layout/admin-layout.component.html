@@ -1,0 +1,29 @@
+<div class="admin-layout d-flex">
+  <!-- Sidebar -->
+  <nav class="sidebar d-flex flex-column p-3 shadow-lg fancy-sidebar" style="background: linear-gradient(135deg, #4f8cff 0%, #3358e6 100%); color: #fff;">
+    <div class="sidebar-logo mb-4 d-flex align-items-center justify-content-center">
+      <i class="pi pi-graduation-cap fs-3 me-2 text-warning"></i>
+      <span class="fw-bold fs-5">ExamAdmin</span>
+    </div>
+    <p-panelMenu [model]="menuItems" styleClass="w-100"></p-panelMenu>
+  </nav>
+
+  <!-- Main Area -->
+  <div class="main-area flex-grow-1">
+    <!-- Header -->
+    <div class="admin-header d-flex justify-content-between align-items-center px-4 py-3 border-bottom bg-white shadow-sm" style="border-radius: 0 0 16px 16px; border-bottom: 3px solid #4f8cff;">
+      <h2 class="fw-bold mb-0 text-primary">{{ headerTitle }}</h2>
+      <div class="d-flex align-items-center gap-3">
+        <i class="pi pi-user-circle fs-4 text-primary"></i>
+        <span class="fw-semibold text-secondary">Welcome, {{ userName }}</span>
+        <button class="btn btn-outline-danger btn-sm ms-3" (click)="logout()">
+          <i class="pi pi-sign-out"></i> Logout
+        </button>
+      </div>
+    </div>
+    <!-- Main Content -->
+    <div class="main-content p-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
