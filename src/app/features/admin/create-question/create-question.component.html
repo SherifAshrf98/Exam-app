@@ -1,0 +1,64 @@
+<div class="container-fluid py-4">
+  <div class="mb-4">
+    <h4 class="fw-bold">Create Question</h4>
+  </div>
+  <div class="bg-white rounded shadow-sm p-4" style="max-width: 900px; margin: 0 auto;">
+    <form [formGroup]="form">
+      <div class="mb-3">
+        <label class="form-label">Subject</label>
+        <p-select [options]="subjects" formControlName="subject" optionLabel="name" placeholder="Select Subject"
+          class="w-100"></p-select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Question</label>
+        <textarea pInputTextarea formControlName="question" rows="3" class="form-control"
+          placeholder="Enter your question here..."></textarea>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Option A</label>
+          <input pInputText formControlName="optionA" class="form-control" placeholder="Option A" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Option B</label>
+          <input pInputText formControlName="optionB" class="form-control" placeholder="Option B" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Option C</label>
+          <input pInputText formControlName="optionC" class="form-control" placeholder="Option C" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Option D</label>
+          <input pInputText formControlName="optionD" class="form-control" placeholder="Option D" />
+        </div>
+      </div>
+      <div class="row g-3 mt-3">
+        <div class="col-md-6">
+          <label class="form-label">Correct Answer</label>
+          <p-select [options]="answerOptions" formControlName="correctAnswer" optionLabel="label" optionValue="value"
+            placeholder="Select Correct Answer" class="w-100"></p-select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Difficulty</label>
+          <p-select [options]="difficultyOptions" formControlName="difficulty" optionLabel="label" optionValue="value"
+            placeholder="Select Difficulty" class="w-100"></p-select>
+        </div>
+      </div>
+      <div class="mt-4">
+        <button (click)="onSubmit()" type="submit" class="w-100 btn btn-primary" [disabled]="form.invalid || isLoading">
+          Create Question
+        </button>
+      </div>
+      @if (successMessage) {
+      <div class="alert alert-success mt-3">
+        <i class="pi pi-check-circle"></i> {{ successMessage }}
+      </div>
+      }
+      @if (errorMessage) {
+      <div class="alert alert-danger mt-3">
+        <i class="pi pi-exclamation-triangle"></i> {{ errorMessage }}
+      </div>
+      }
+    </form>
+  </div>
+</div>

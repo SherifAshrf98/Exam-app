@@ -1,0 +1,43 @@
+<div class="students-management p-4">
+  @if (loading) {
+    <div class="blur-overlay">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  }
+  <h5 class="fw-bold mb-4">Students Management</h5>
+  <p-table [value]="students" [loading]="false" class="p-datatable-sm" [paginator]="false" [rows]="pageSize">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>STUDENT</th>
+        <th>EMAIL</th>
+        <th>STATUS</th>
+        <th>ACTIONS</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-student>
+      <tr>
+        <td class="d-flex align-items-center gap-2">
+          <span>{{ student.fullName }}</span>
+          <span class="text-secondary ms-2 small">({{ student.userName }})</span>
+        </td>
+        <td>{{ student.email }}</td>
+        <td>
+          <span class="badge" [ngClass]="student.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+            {{ student.status }}
+          </span>
+        </td>
+        <td>
+          <button pButton type="button" class="p-button-text p-0 me-2"
+                  [label]="student.status === 'Active' ? 'Suspend' : 'Enable'"
+                  [class.text-danger]="student.status === 'Active'"
+                  [class.text-success]="student.status === 'Suspended'"
+                  (click)="toggleStatus(student)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div class="d-flex justify-content-between align-items-center mt-2">
+    <span>Showing {{ (page - 1) * pageSize + 1 }}-{{ min(page * pageSize, totalRecords) }} of {{ totalRecords }} students</span>
+    <p-paginator [rows]="pageSize" [totalRecords]="totalRecords" [first]="(page - 1) * pageSize" (onPageChange)="onPageChange($event)" [rowsPerPageOptions]="[5, 10, 20, 50]"></p-paginator>
+  </div>
+</div>
