@@ -4,13 +4,15 @@ import { LoginService } from '../../services/login.service';
 import { filter } from 'rxjs';
 import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
+import { AvatarModule } from 'primeng/avatar';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.css'],
   standalone: true,
-  imports: [RouterModule, PanelMenuModule]
+  imports: [RouterModule, PanelMenuModule, AvatarModule, ButtonModule]
 })
 export class AdminLayoutComponent {
   

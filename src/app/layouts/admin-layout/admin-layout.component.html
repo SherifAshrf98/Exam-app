@@ -1,28 +1,46 @@
 <div class="admin-layout d-flex">
   <!-- Sidebar -->
-  <nav class="sidebar d-flex flex-column p-3 shadow-lg fancy-sidebar" style="background: linear-gradient(135deg, #4f8cff 0%, #3358e6 100%); color: #fff;">
+  <nav class="sidebar d-flex flex-column p-3 shadow-lg modern-sidebar">
     <div class="sidebar-logo mb-4 d-flex align-items-center justify-content-center">
       <i class="pi pi-graduation-cap fs-3 me-2 text-warning"></i>
       <span class="fw-bold fs-5">ExamAdmin</span>
     </div>
-    <p-panelMenu [model]="menuItems" styleClass="w-100"></p-panelMenu>
+    <div class="sidebar-profile mb-4 text-center">
+      <p-avatar icon="pi pi-user" shape="circle" size="large" styleClass="mb-2"></p-avatar>
+      <div class="fw-semibold">{{ userName }}</div>
+      <div class="text-white-50 small">Admin</div>
+      <div class="d-flex justify-content-center gap-2 mt-2">
+        <button pButton icon="pi pi-bell" class="p-button-rounded p-button-text position-relative"></button>
+        <button pButton icon="pi pi-sign-out" class="p-button-rounded p-button-danger" (click)="logout()"></button>
+      </div>
+    </div>
+    <div class="sidebar-section-title text-uppercase small text-secondary mb-2">Main</div>
+    <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
+      <i class="pi pi-home me-2"></i> Dashboard
+    </a>
+    <a routerLink="/admin/students" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
+      <i class="pi pi-users me-2"></i> Students
+    </a>
+    <a routerLink="/admin/exams" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
+      <i class="pi pi-book me-2"></i> Exams
+    </a>
+    <div class="sidebar-section-title text-uppercase small text-secondary mt-4 mb-2">Subjects</div>
+    <a routerLink="/admin/exam-configurations" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
+      <i class="pi pi-cog me-2"></i> Exam Configurations
+    </a>
+    <a routerLink="/admin/create-question" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
+      <i class="pi pi-question-circle me-2"></i> Questions
+    </a>
+    <div class="mt-auto pt-4">
+      <div class="sidebar-section-title mb-2 text-uppercase small text-secondary">Support</div>
+      <a href="#" class="nav-link text-white-50"><i class="pi pi-question-circle me-2"></i> Help Center</a>
+      <div class="sidebar-footer mt-4 text-center text-white-50 small">v1.0.0 &copy; 2024</div>
+    </div>
   </nav>
 
   <!-- Main Area -->
   <div class="main-area flex-grow-1">
-    <!-- Header -->
-    <div class="admin-header d-flex justify-content-between align-items-center px-4 py-3 border-bottom bg-white shadow-sm" style="border-radius: 0 0 16px 16px; border-bottom: 3px solid #4f8cff;">
-      <h2 class="fw-bold mb-0 text-primary">{{ headerTitle }}</h2>
-      <div class="d-flex align-items-center gap-3">
-        <i class="pi pi-user-circle fs-4 text-primary"></i>
-        <span class="fw-semibold text-secondary">Welcome, {{ userName }}</span>
-        <button class="btn btn-outline-danger btn-sm ms-3" (click)="logout()">
-          <i class="pi pi-sign-out"></i> Logout
-        </button>
-      </div>
-    </div>
-    <!-- Main Content -->
-    <div class="main-content p-4">
+    <div class="main-content p-4" style="background: #f8f9fb;">
       <router-outlet></router-outlet>
     </div>
   </div>

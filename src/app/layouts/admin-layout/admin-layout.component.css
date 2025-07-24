@@ -34,25 +34,49 @@
 }
 
 .sidebar.fancy-sidebar {
+  width: 280px;
+  min-width: 280px;
   background: linear-gradient(135deg, #4f8cff 0%, #3358e6 100%);
   color: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.08);
   min-height: 100vh;
-  padding: 2rem 1rem;
+  padding: 2.5rem 1.5rem;
 }
 .sidebar .p-panelmenu .p-menuitem-link {
   color: #fff;
   border-radius: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+  padding: 14px 20px;
   transition: background 0.2s, color 0.2s;
 }
 .sidebar .p-panelmenu .p-menuitem-link:hover {
   background: rgba(255,255,255,0.15);
   color: #ffd700;
 }
+.sidebar .p-panelmenu .pi {
+  font-size: 1.3rem;
+}
 .sidebar-logo img.sidebar-avatar {
   box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.sidebar-section-title {
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar-footer {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.sidebar .nav-link.text-white-50 {
+  color: #b0b8c1 !important;
 }
 
 .main-area {
