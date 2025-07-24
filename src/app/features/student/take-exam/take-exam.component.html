@@ -1,3 +1,49 @@
-<p>
-    dfsfsd
-</p>
+<div class="take-exam-container p-4">
+  @if (loading) {
+    <div class="d-flex justify-content-center my-4">
+      <p-progressSpinner styleClass="w-3rem h-3rem"></p-progressSpinner>
+    </div>
+  }
+  @if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+  }
+  @if (!exam && !loading) {
+    <div class="mb-4">
+      <label for="subjectSelect" class="form-label fw-semibold">Select Subject</label>
+      <p-select
+        [options]="subjects"
+        optionLabel="name"
+        placeholder="Select a subject"
+        [(ngModel)]="selectedSubject"
+        (ngModelChange)="onSubjectSelect($event)"
+        [showClear]="true"
+        inputId="subjectSelect"
+        styleClass="w-100 mb-3"
+      ></p-select>
+    </div>
+  }
+  @if (exam && !loading) {
+    <div class="card p-4 shadow-sm rounded-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0">{{ exam.subjectName }} Exam</h4>
+        <span class="fw-bold text-primary" style="font-size: 1.2rem;">Time Remaining: {{ formattedTimer }}</span>
+      </div>
+      <div class="mb-2 text-secondary small">Duration: {{ exam.duration }} min | Started: {{ exam.startedAt | date:'yyyy-MM-dd HH:mm' }}</div>
+      <form>
+        <div *ngFor="let q of exam.questions; let i = index" class="mb-4">
+          <div class="fw-semibold mb-2">Q{{ i+1 }}. {{ q.text }}</div>
+          <div class="d-flex flex-column gap-2 ms-3">
+            <div *ngFor="let opt of q.options">
+              <p-radioButton name="q{{q.questionId}}" [value]="opt.id" [(ngModel)]="q.selectedOption" inputId="opt{{opt.id}}"></p-radioButton>
+              <label [for]="'opt'+opt.id" class="ms-2">{{ opt.text }}</label>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-2 mt-4">
+          <button pButton type="button" label="Submit" class="p-button-success"></button>
+          <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="exam = null; selectedSubject = null;"></button>
+        </div>
+      </form>
+    </div>
+  }
+</div>
