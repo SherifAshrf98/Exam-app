@@ -1,0 +1,45 @@
+<div *ngIf="loading" class="text-center my-5">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<div *ngIf="!loading && summary">
+  <h3 class="fw-bold mb-4">Dashboard Summary</h3>
+  <div class="row g-4">
+    <div class="col-md-3 col-6">
+      <div class="card text-center p-3 shadow-sm border-0">
+        <div class="mb-2">
+          <i class="pi pi-users fs-2 text-primary"></i>
+        </div>
+        <div class="fw-bold text-secondary small">Total Students</div>
+        <div class="display-6 fw-bold text-primary">{{ summary.totalStudents }}</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card text-center p-3 shadow-sm border-0">
+        <div class="mb-2">
+          <i class="pi pi-check-circle fs-2 text-success"></i>
+        </div>
+        <div class="fw-bold text-secondary small">Passed Exams</div>
+        <div class="display-6 fw-bold text-success">{{ summary.totalPassedExams }}</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card text-center p-3 shadow-sm border-0">
+        <div class="mb-2">
+          <i class="pi pi-times-circle fs-2 text-danger"></i>
+        </div>
+        <div class="fw-bold text-secondary small">Failed Exams</div>
+        <div class="display-6 fw-bold text-danger">{{ summary.totalFailedExams }}</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="card text-center p-3 shadow-sm border-0">
+        <div class="mb-2">
+          <i class="pi pi-file fs-2 text-info"></i>
+        </div>
+        <div class="fw-bold text-secondary small">Submitted Exams</div>
+        <div class="display-6 fw-bold text-info">{{ summary.totalSubmittedExams }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
