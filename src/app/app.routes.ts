@@ -17,7 +17,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', loadComponent: () => import('./features/admin/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'students', loadComponent: () => import('./features/admin/students/students.component').then(m => m.StudentsComponent) },
-      { path: 'exams', loadComponent: () => import('./features/admin/exams/exams.component').then(m => m.ExamsComponent) },
+      { path: 'exams', loadComponent: () => import('./features/admin/exams/admin-exams.component').then(m => m.AdminExamsComponent) },
       { path: 'create-question', loadComponent: () => import('./features/admin/create-question/create-question.component').then(m => m.CreateQuestionComponent) },
       { path: 'exam-configurations', loadComponent: () => import('./features/admin/exam-configurations/exam-configurations.component').then(m => m.ExamConfigurationsComponent) },
     ]

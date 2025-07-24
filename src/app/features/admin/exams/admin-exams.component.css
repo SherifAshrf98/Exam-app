@@ -1,0 +1,13 @@
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  background: #fff;
+}
+.p-table {
+  margin-bottom: 0;
+}
+.badge {
+  padding: 0.25em 0.75em;
+  border-radius: 8px;
+  font-size: 0.95em;
+} 
