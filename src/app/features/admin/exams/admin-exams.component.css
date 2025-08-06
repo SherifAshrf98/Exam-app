@@ -15,4 +15,24 @@
   padding: 0.25em 0.75em;
   border-radius: 8px;
   font-size: 0.95em;
+}
+
+.badge.bg-success {
+  background-color: #198754 !important;
+  color: white;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+  color: white;
+}
+
+.badge.bg-warning {
+  background-color: #ffc107 !important;
+  color: #000;
+}
+
+.text-muted {
+  color: #6c757d !important;
+  font-style: italic;
 } 

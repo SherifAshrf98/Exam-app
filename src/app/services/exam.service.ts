@@ -7,7 +7,8 @@ export interface ExamHistoryItem {
   subjectName: string;
   duration: number;
   studentName: string;
-  score: number;
+  score: number | null; // Can be null for non-submitted exams
+  status: 'Submitted' | 'Expired' | 'InProgress'; // Add exam status
 }
 
 export interface ExamOption {
@@ -32,6 +33,7 @@ export interface RequestedExam {
 }
 
 export interface StudentExamHistoryItem {
+  examId: number;
   startedAt: string;
   subjectName: string;
   duration: number;
@@ -39,11 +41,41 @@ export interface StudentExamHistoryItem {
   score: number;
 }
 
+export interface ExamAnswer {
+  questionId: number;
+  selectedOptionId: number;
+}
+
+export interface ExamSubmission {
+  examId: number;
+  answers: ExamAnswer[];
+}
+
+export interface ExamResultOption {
+  id: number;
+  text: string;
+  isCorrect: boolean;
+}
+
+export interface ExamResultQuestion {
+  questionText: string;
+  options: ExamResultOption[];
+  selectedOptionId: number | null;
+  isAnswerCorrect: boolean;
+}
+
+export interface ExamDetailedResult {
+  data: ExamResultQuestion[];
+  statusCode: number;
+  message: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ExamService {
   private apiUrl = 'https://localhost:7169/api/Exam/history';
   private requestExamUrl = 'https://localhost:7169/api/Exam/request';
   private studentExamsUrl = 'https://localhost:7169/api/Student/Exams';
+  private submitExamUrl = 'https://localhost:7169/api/Exam/submit';
 
   constructor(private http: HttpClient) {}
 
@@ -57,5 +89,17 @@ export class ExamService {
 
   requestExam(subjectId: number): Observable<any> {
     return this.http.post<any>(this.requestExamUrl, { subjectId: subjectId });
+  }
+
+  submitExam(examId: number, answers: ExamAnswer[]): Observable<any> {
+    const submission: ExamSubmission = {
+      examId: examId,
+      answers: answers
+    };
+    return this.http.post<any>(this.submitExamUrl, submission);
+  }
+
+  getExamDetailedResult(examId: number): Observable<ExamDetailedResult> {
+    return this.http.get<ExamDetailedResult>(`https://localhost:7169/api/Exam/result/${examId}`);
   }
 } 

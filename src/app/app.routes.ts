@@ -28,6 +28,8 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: { roles: ['Student'] },
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', loadComponent: () => import('./features/student/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'exams-history', loadComponent: () => import('./features/student/exams-history/exams-history.component').then(m => m.ExamsHistoryComponent) },
       { path: 'take-exam', loadComponent: () => import('./features/student/take-exam/take-exam.component').then(m => m.TakeExamComponent) },
     ]

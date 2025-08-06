@@ -1,39 +1,339 @@
-<div class="exams-history p-4">
+<div class="exams-history">
+  <!-- Loading Overlay -->
   @if (loading) {
-    <div class="blur-overlay">
-      <p-progressSpinner></p-progressSpinner>
+    <div class="loading-overlay">
+      <p-progressSpinner strokeWidth="3" fill="transparent" animationDuration="1s"></p-progressSpinner>
     </div>
   }
-  <div class="card p-4 shadow-sm rounded-4">
-    <h4 class="fw-bold mb-4">My Exam History</h4>
-    <p-table [value]="exams" class="p-datatable-sm rounded-3 overflow-hidden" [paginator]="false">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>SUBJECT</th>
-          <th>SCORE</th>
-          <th>DURATION</th>
-          <th>DATE & TIME</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-exam>
-        <tr>
-          <td>{{ exam.subjectName }}</td>
-          <td>
-            <span [ngClass]="{
-              'badge bg-success-subtle text-success': exam.score >= 50,
-              'badge bg-danger-subtle text-danger': exam.score < 50
-            }">
-              {{ exam.score }}%
-            </span>
-          </td>
-          <td>{{ exam.duration }} min</td>
-          <td>{{ exam.startedAt | date:'yyyy-MM-dd HH:mm' }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <div class="d-flex justify-content-between align-items-center mt-2">
-      <span>Showing {{ (page - 1) * pageSize + 1 }}-{{ min(page * pageSize, totalRecords) }} of {{ totalRecords }} exams</span>
-      <p-paginator [rows]="pageSize" [totalRecords]="totalRecords" [first]="(page - 1) * pageSize" (onPageChange)="onPageChange($event)" [rowsPerPageOptions]="[5, 10, 20, 50]"></p-paginator>
+
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="page-title">
+          <i class="pi pi-history"></i>
+          Exam History
+        </h1>
+        <p class="page-subtitle">Track your academic performance and progress over time</p>
+      </div>
+      <div class="header-stats">
+        <div class="stat-badge">
+          <span class="stat-number">{{ filteredTotalRecords }}</span>
+          <span class="stat-label">{{ hasActiveFilters() ? 'Filtered' : 'Total' }} Exams</span>
+        </div>
+        <div class="stat-badge">
+          <span class="stat-number">{{ getAverageScore() }}%</span>
+          <span class="stat-label">Average Score</span>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Filters and Search -->
+  <div class="filters-section">
+    <div class="search-box">
+      <i class="pi pi-search search-icon"></i>
+      <input type="text" placeholder="Search by subject..." [(ngModel)]="searchTerm" (input)="onSearch()" class="search-input">
+    </div>
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="selectedFilter === 'all'" (click)="setFilter('all')">
+        All
+      </button>
+      <button class="filter-btn" [class.active]="selectedFilter === 'passed'" (click)="setFilter('passed')">
+        Passed
+      </button>
+      <button class="filter-btn" [class.active]="selectedFilter === 'failed'" (click)="setFilter('failed')">
+        Failed
+      </button>
+      @if (hasActiveFilters()) {
+        <button class="clear-filters-btn" (click)="clearFilters()">
+          <i class="pi pi-times"></i>
+          Clear Filters
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Exam Cards Grid -->
+  <div class="exam-cards-container">
+    @if (exams.length === 0 && !loading) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="pi pi-inbox"></i>
+        </div>
+        <h3 class="empty-title">No Exam History</h3>
+        <p class="empty-message">You haven't taken any exams yet. Start your first exam to see your history here.</p>
+        <button class="empty-action-btn" routerLink="/student/take-exam">
+          <i class="pi pi-pencil"></i>
+          Take Your First Exam
+        </button>
+      </div>
+    } @else {
+      <div class="exam-cards-grid">
+        @for (exam of exams; track exam.startedAt + exam.subjectName) {
+          <div class="exam-card" [class.high-score]="exam.score >= 80" [class.medium-score]="exam.score >= 50 && exam.score < 80" [class.low-score]="exam.score < 50">
+            <!-- Score Badge -->
+            <div class="score-badge">
+              <div class="score-circle">
+                <span class="score-percentage">{{ exam.score }}%</span>
+                <div class="score-ring" [style.--score]="exam.score"></div>
+              </div>
+            </div>
+
+            <!-- Card Content -->
+            <div class="card-content">
+              <div class="exam-subject">
+                <h3 class="subject-name">{{ exam.subjectName }}</h3>
+                <span class="exam-status" [ngClass]="{
+                  'status-excellent': exam.score >= 90,
+                  'status-good': exam.score >= 70 && exam.score < 90,
+                  'status-average': exam.score >= 50 && exam.score < 70,
+                  'status-poor': exam.score < 50
+                }">
+                  {{ getPerformanceLabel(exam.score) }}
+                </span>
+              </div>
+
+              <div class="exam-details">
+                <div class="detail-item">
+                  <i class="pi pi-calendar detail-icon"></i>
+                  <div class="detail-content">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">{{ exam.startedAt | date:'MMM dd, yyyy' }}</span>
+                  </div>
+                </div>
+
+                <div class="detail-item">
+                  <i class="pi pi-clock detail-icon"></i>
+                  <div class="detail-content">
+                    <span class="detail-label">Duration</span>
+                    <span class="detail-value">{{ exam.duration }} min</span>
+                  </div>
+                </div>
+
+                <div class="detail-item">
+                  <i class="pi pi-stopwatch detail-icon"></i>
+                  <div class="detail-content">
+                    <span class="detail-label">Time</span>
+                    <span class="detail-value">{{ exam.startedAt | date:'HH:mm' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="card-actions">
+                <button class="action-btn primary-btn" (click)="viewExamDetails(exam)">
+                  <i class="pi pi-eye"></i>
+                  View Details
+                </button>
+                <button class="action-btn secondary-btn">
+                  <i class="pi pi-download"></i>
+                  Report
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Pagination -->
+  @if (filteredTotalRecords > pageSize) {
+    <div class="pagination-section">
+      <div class="pagination-info">
+        <span>Showing {{ getShowingText() }} of {{ filteredTotalRecords }} exams</span>
+      </div>
+      <p-paginator 
+        [rows]="pageSize" 
+        [totalRecords]="filteredTotalRecords" 
+        [first]="(page - 1) * pageSize" 
+        (onPageChange)="onPageChange($event)" 
+        [rowsPerPageOptions]="[6, 12, 24]"
+        styleClass="modern-paginator">
+      </p-paginator>
+    </div>
+  }
+
+  <!-- Exam Details Modal -->
+  <p-dialog 
+    [(visible)]="showDetailsModal" 
+    [modal]="true" 
+    [closable]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="exam-details-dialog"
+    header="Exam Details"
+    [style]="{width: '90vw', maxWidth: '1200px', height: '90vh'}">
+    
+    @if (selectedExam) {
+      <div class="exam-details-content">
+        <!-- Header Section -->
+        <div class="details-header">
+          <div class="header-info">
+            <h2 class="exam-title">{{ selectedExam.subjectName }}</h2>
+            <div class="exam-meta">
+              <span class="meta-item">
+                <i class="pi pi-calendar"></i>
+                {{ selectedExam.startedAt | date:'MMM dd, yyyy' }}
+              </span>
+              <span class="meta-item">
+                <i class="pi pi-clock"></i>
+                {{ selectedExam.duration }} minutes
+              </span>
+              <span class="meta-item">
+                <i class="pi pi-stopwatch"></i>
+                {{ selectedExam.startedAt | date:'HH:mm' }}
+              </span>
+            </div>
+          </div>
+          <div class="score-summary">
+            <div class="score-circle-large">
+              <span class="score-percentage-large">{{ selectedExam.score }}%</span>
+              <div class="score-ring-large" [style.--score]="selectedExam.score"></div>
+            </div>
+            <div class="score-status" [ngClass]="{
+              'status-excellent': selectedExam.score >= 90,
+              'status-good': selectedExam.score >= 70 && selectedExam.score < 90,
+              'status-average': selectedExam.score >= 50 && selectedExam.score < 70,
+              'status-poor': selectedExam.score < 50
+            }">
+              {{ getPerformanceLabel(selectedExam.score) }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance Overview -->
+        @if (examDetails && !loadingDetails) {
+          <div class="performance-overview">
+            <div class="overview-cards">
+              <div class="overview-card">
+                <div class="card-icon success">
+                  <i class="pi pi-check"></i>
+                </div>
+                <div class="card-content">
+                  <h3>{{ getCorrectAnswersCount() }}</h3>
+                  <p>Correct Answers</p>
+                </div>
+              </div>
+              <div class="overview-card">
+                <div class="card-icon danger">
+                  <i class="pi pi-times"></i>
+                </div>
+                <div class="card-content">
+                  <h3>{{ getTotalQuestionsCount() - getCorrectAnswersCount() }}</h3>
+                  <p>Incorrect Answers</p>
+                </div>
+              </div>
+              <div class="overview-card">
+                <div class="card-icon info">
+                  <i class="pi pi-list"></i>
+                </div>
+                <div class="card-content">
+                  <h3>{{ getTotalQuestionsCount() }}</h3>
+                  <p>Total Questions</p>
+                </div>
+              </div>
+              <div class="overview-card">
+                <div class="card-icon warning">
+                  <i class="pi pi-percentage"></i>
+                </div>
+                <div class="card-content">
+                  <h3>{{ Math.round((getCorrectAnswersCount() / getTotalQuestionsCount()) * 100) }}%</h3>
+                  <p>Accuracy Rate</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Questions Review -->
+          <div class="questions-review">
+            <h3 class="section-title">
+              <i class="pi pi-list"></i>
+              Question by Question Review
+            </h3>
+            <div class="questions-list">
+              @for (question of examDetails.data; track $index) {
+                <div class="question-item" [class.correct]="question.isAnswerCorrect" [class.incorrect]="!question.isAnswerCorrect">
+                  <div class="question-header">
+                    <div class="question-number">
+                      <span class="number">{{ $index + 1 }}</span>
+                      <div class="status-indicator" [class.correct]="question.isAnswerCorrect" [class.incorrect]="!question.isAnswerCorrect">
+                        <i class="pi" [ngClass]="question.isAnswerCorrect ? 'pi-check' : 'pi-times'"></i>
+                      </div>
+                    </div>
+                    <div class="question-content">
+                      <h4 class="question-text">{{ question.questionText }}</h4>
+                    </div>
+                  </div>
+                  
+                  <div class="answers-section">
+                    <div class="answer-row">
+                      <div class="answer-label">Your Answer:</div>
+                      <div class="answer-value" [class.correct]="question.isAnswerCorrect" [class.incorrect]="!question.isAnswerCorrect">
+                        <i class="pi" [ngClass]="question.isAnswerCorrect ? 'pi-check-circle' : 'pi-times-circle'"></i>
+                        {{ getSelectedAnswerText(question) }}
+                      </div>
+                    </div>
+                    @if (!question.isAnswerCorrect) {
+                      <div class="answer-row">
+                        <div class="answer-label">Correct Answer:</div>
+                        <div class="answer-value correct">
+                          <i class="pi pi-check-circle"></i>
+                          {{ getCorrectAnswerText(question) }}
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- All Options Display -->
+                  <div class="options-section">
+                    <div class="options-grid">
+                      @for (option of question.options; track option.id) {
+                        <div class="option-item" [class.selected]="option.id === question.selectedOptionId" [class.correct]="option.isCorrect">
+                          <div class="option-indicator">
+                            @if (option.id === question.selectedOptionId && option.isCorrect) {
+                              <i class="pi pi-check-circle"></i>
+                            } @else if (option.id === question.selectedOptionId && !option.isCorrect) {
+                              <i class="pi pi-times-circle"></i>
+                            } @else if (option.isCorrect) {
+                              <i class="pi pi-check"></i>
+                            } @else {
+                              <span class="option-letter">{{ String.fromCharCode(65 + $index) }}</span>
+                            }
+                          </div>
+                          <span class="option-text">{{ option.text }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Loading State -->
+        @if (loadingDetails) {
+          <div class="details-loading">
+            <p-progressSpinner strokeWidth="3" fill="transparent" animationDuration="1s"></p-progressSpinner>
+            <p>Loading detailed results...</p>
+          </div>
+        }
+      </div>
+    }
+
+    <ng-template pTemplate="footer">
+      <div class="modal-footer">
+        <button class="footer-btn secondary" (click)="closeDetailsModal()">
+          <i class="pi pi-times"></i>
+          Close
+        </button>
+        <button class="footer-btn primary">
+          <i class="pi pi-download"></i>
+          Download Report
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>

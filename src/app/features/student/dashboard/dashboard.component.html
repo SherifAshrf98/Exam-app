@@ -1,0 +1,140 @@
+<div class="dashboard">
+  <!-- Toast for notifications -->
+  <p-toast></p-toast>
+
+  <!-- Welcome Section -->
+  <div class="welcome-card">
+    <div class="welcome-content">
+      <div class="welcome-text">
+        <h1 class="welcome-title">Welcome back, Student!</h1>
+        <p class="welcome-subtitle">Here's your academic overview and upcoming exams.</p>
+      </div>
+      <div class="welcome-illustration">
+        <i class="pi pi-graduation-cap"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-book"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-number">{{ summary?.totalExams }}</h3>
+        <p class="stat-label">Total Exams</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-number">{{ summary?.completedExams }}</h3>
+        <p class="stat-label">Completed</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-chart-line"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-number">{{ summary?.averageScore }}%</h3>
+        <p class="stat-label">Average Score</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="pi pi-graduation-cap"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-number">{{ summary?.totalSubjects }}</h3>
+        <p class="stat-label">Subjects</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Progress Section -->
+    <div class="content-card">
+      <div class="card-header">
+        <h3 class="card-title">Exam Progress</h3>
+        <div class="card-actions">
+          <button class="action-btn">
+            <i class="pi pi-refresh"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="progress-section">
+          <div class="progress-info">
+            <span class="progress-label">Completion Rate</span>
+            <span class="progress-percentage">{{ getCompletionPercentage() }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getCompletionPercentage()"></div>
+          </div>
+          <div class="progress-details">
+            <small>{{ summary?.completedExams }} of {{ summary?.totalExams }} exams completed</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="content-card">
+      <div class="card-header">
+        <h3 class="card-title">Quick Actions</h3>
+      </div>
+      <div class="card-content">
+        <div class="action-buttons">
+          <button class="action-btn primary" routerLink="/student/take-exam">
+            <i class="pi pi-pencil"></i>
+            <span>Take Exam</span>
+          </button>
+          <button class="action-btn secondary" routerLink="/student/exams-history">
+            <i class="pi pi-history"></i>
+            <span>View History</span>
+          </button>
+
+          <!-- Content Sections -->
+          <div class="content-grid">
+            <!-- Upcoming Exams -->
+           
+
+            <!-- Recent Results -->
+            <div class="content-card">
+              <div class="card-header">
+                <h3 class="card-title">Recent Results</h3>
+                <div class="card-actions">
+                  <button class="action-btn">
+                    <i class="pi pi-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="result-list">
+                  <div *ngFor="let result of recentResults" class="result-item">
+                    <div class="result-header">
+                      <h4 class="result-title">{{ result.examTitle }}</h4>
+                      <span class="result-subject">{{ result.subject }}</span>
+                    </div>
+                    <div class="result-score">
+                      <div class="score-circle" [ngClass]="'score-' + getScoreColor(result.score)">
+                        <span class="score-number">{{ result.score }}%</span>
+                      </div>
+                    </div>
+                    <div class="result-details">
+                      <small>{{ result.totalQuestions }} questions • {{ result.date }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>

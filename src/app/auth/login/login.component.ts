@@ -53,7 +53,7 @@ export class LoginComponent {
             this.router.navigate(['/admin/dashboard']);
 
           } else if (roles.includes('Student')) {
-            this.router.navigate(['/student/exams-history']);
+            this.router.navigate(['/student/dashboard']);
             
           } else {
             this.router.navigate(['/']);

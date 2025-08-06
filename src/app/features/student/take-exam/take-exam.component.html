@@ -1,4 +1,6 @@
 <div class="take-exam-container p-4">
+  <p-toast></p-toast>
+  
   @if (loading) {
     <div class="d-flex justify-content-center my-4">
       <p-progressSpinner styleClass="w-3rem h-3rem"></p-progressSpinner>
@@ -40,8 +42,23 @@
           </div>
         </div>
         <div class="d-flex gap-2 mt-4">
-          <button pButton type="button" label="Submit" class="p-button-success"></button>
-          <button pButton type="button" label="Cancel" class="p-button-secondary" (click)="exam = null; selectedSubject = null;"></button>
+          <button 
+            pButton 
+            type="button" 
+            label="Submit Exam" 
+            class="p-button-success"
+            (click)="submitExam()"
+            [disabled]="submitting"
+            [loading]="submitting"
+          ></button>
+          <button 
+            pButton 
+            type="button" 
+            label="Cancel" 
+            class="p-button-secondary" 
+            (click)="cancelExam()"
+            [disabled]="submitting"
+          ></button>
         </div>
       </form>
     </div>

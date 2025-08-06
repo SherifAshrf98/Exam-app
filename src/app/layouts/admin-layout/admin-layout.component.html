@@ -1,47 +1,65 @@
-<div class="admin-layout d-flex">
-  <!-- Sidebar -->
-  <nav class="sidebar d-flex flex-column p-3 shadow-lg modern-sidebar">
-    <div class="sidebar-logo mb-4 d-flex align-items-center justify-content-center">
-      <i class="pi pi-graduation-cap fs-3 me-2 text-warning"></i>
-      <span class="fw-bold fs-5">ExamAdmin</span>
-    </div>
-    <div class="sidebar-profile mb-4 text-center">
-      <p-avatar icon="pi pi-user" shape="circle" size="large" styleClass="mb-2"></p-avatar>
-      <div class="fw-semibold">{{ userName }}</div>
-      <div class="text-white-50 small">Admin</div>
-      <div class="d-flex justify-content-center gap-2 mt-2">
-        <button pButton icon="pi pi-bell" class="p-button-rounded p-button-text position-relative"></button>
-        <button pButton icon="pi pi-sign-out" class="p-button-rounded p-button-danger" (click)="logout()"></button>
+<div class="admin-layout">
+  <p-toast></p-toast>
+  
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+      <!-- Brand -->
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <i class="pi pi-graduation-cap fs-3 me-2 text-warning"></i>
+        <span class="fw-bold">ExamAdmin</span>
+      </a>
+
+      <!-- Navbar items -->
+      <div class="navbar-nav me-auto">
+        <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link">
+          <i class="pi pi-home me-1"></i> Dashboard
+        </a>
+        <a routerLink="/admin/students" routerLinkActive="active" class="nav-link">
+          <i class="pi pi-users me-1"></i> Students
+        </a>
+        <a routerLink="/admin/exams" routerLinkActive="active" class="nav-link">
+          <i class="pi pi-book me-1"></i> Exams
+        </a>
+        <a routerLink="/admin/exam-configurations" routerLinkActive="active" class="nav-link">
+          <i class="pi pi-cog me-1"></i> Configurations
+        </a>
+        <a routerLink="/admin/create-question" routerLinkActive="active" class="nav-link">
+          <i class="pi pi-question-circle me-1"></i> Questions
+        </a>
       </div>
-    </div>
-    <div class="sidebar-section-title text-uppercase small text-secondary mb-2">Main</div>
-    <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
-      <i class="pi pi-home me-2"></i> Dashboard
-    </a>
-    <a routerLink="/admin/students" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
-      <i class="pi pi-users me-2"></i> Students
-    </a>
-    <a routerLink="/admin/exams" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
-      <i class="pi pi-book me-2"></i> Exams
-    </a>
-    <div class="sidebar-section-title text-uppercase small text-secondary mt-4 mb-2">Subjects</div>
-    <a routerLink="/admin/exam-configurations" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
-      <i class="pi pi-cog me-2"></i> Exam Configurations
-    </a>
-    <a routerLink="/admin/create-question" routerLinkActive="active" class="nav-link d-flex align-items-center mb-2">
-      <i class="pi pi-question-circle me-2"></i> Questions
-    </a>
-    <div class="mt-auto pt-4">
-      <div class="sidebar-section-title mb-2 text-uppercase small text-secondary">Support</div>
-      <a href="#" class="nav-link text-white-50"><i class="pi pi-question-circle me-2"></i> Help Center</a>
-      <div class="sidebar-footer mt-4 text-center text-white-50 small">v1.0.0 &copy; 2024</div>
+
+      <!-- Right side: Notifications and Profile -->
+      <div class="d-flex align-items-center gap-3">
+        <!-- Notification Panel -->
+        <div class="notification-wrapper">
+          <app-notification-panel></app-notification-panel>
+        </div>
+        
+        <!-- User Profile -->
+        <div class="dropdown">
+          <button 
+            class="btn btn-outline-light dropdown-toggle d-flex align-items-center" 
+            type="button" 
+            id="userDropdown" 
+            (click)="toggleUserDropdown()"
+            [class.show]="showUserDropdown">
+            <i class="pi pi-user me-2"></i> 
+            <span class="d-none d-md-inline">{{ userName }}</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" [class.show]="showUserDropdown">
+            <li><a class="dropdown-item" href="#" (click)="viewProfile()"><i class="pi pi-user me-2"></i> Profile</a></li>
+            <li><a class="dropdown-item" href="#" (click)="viewSettings()"><i class="pi pi-cog me-2"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item text-danger" (click)="logout()"><i class="pi pi-sign-out me-2"></i> Logout</button></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- Main Area -->
-  <div class="main-area flex-grow-1">
-    <div class="main-content p-4" style="background: #f8f9fb;">
-      <router-outlet></router-outlet>
-    </div>
+  <!-- Main Content Area -->
+  <div class="main-content p-4" style="background: #f8f9fb; min-height: calc(100vh - 56px);">
+    <router-outlet></router-outlet>
   </div>
 </div>

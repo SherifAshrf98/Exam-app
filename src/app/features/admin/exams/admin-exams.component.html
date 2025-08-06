@@ -7,8 +7,9 @@
           <ng-template pTemplate="header">
             <tr>
               <th style="width: 25%;">SUBJECT</th>
-              <th style="width: 35%;">STUDENT</th>
-              <th style="width: 20%;">SCORE</th>
+              <th style="width: 25%;">STUDENT</th>
+              <th style="width: 15%;">STATUS</th>
+              <th style="width: 15%;">SCORE</th>
               <th style="width: 20%;">DATE & TIME</th>
             </tr>
           </ng-template>
@@ -18,10 +19,22 @@
               <td>{{ exam.studentName }}</td>
               <td>
                 <span [ngClass]="{
+                  'badge bg-success': exam.status === 'Submitted',
+                  'badge bg-danger': exam.status === 'Expired',
+                  'badge bg-warning': exam.status === 'InProgress'
+                }">
+                  {{ exam.status }}
+                </span>
+              </td>
+              <td>
+                <span *ngIf="exam.status === 'Submitted'" [ngClass]="{
                   'badge bg-success-subtle text-success': exam.score >= 50,
                   'badge bg-danger-subtle text-danger': exam.score < 50
                 }">
                   {{ exam.score }}%
+                </span>
+                <span *ngIf="exam.status !== 'Submitted'" class="text-muted">
+                  N/A
                 </span>
               </td>
               <td>{{ exam.startedAt | date:'yyyy-MM-dd HH:mm' }}</td>

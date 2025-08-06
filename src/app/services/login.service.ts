@@ -52,6 +52,18 @@ export class LoginService {
     }
   }
 
+  getUserId(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const decoded: any = jwtDecode(token);
+      
+      return decoded['sub'] || decoded['nameid'] || decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || null;
+    } catch {
+      return null;
+    }
+  }
+
   logout() {
     localStorage.removeItem('token');
   }

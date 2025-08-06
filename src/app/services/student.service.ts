@@ -18,6 +18,12 @@ export class StudentService {
     );
   }
 
+  getStudentById(id: string): Observable<Student> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map(res => res.data as Student)
+    );
+  }
+
   updateStudentStatus(id: string, status: 'Active' | 'Suspended'): Observable<'Active' | 'Suspended'> {
     return this.http.put<any>(`${this.apiUrl}/${id}/state`, { status }).pipe(
       map(() => status)

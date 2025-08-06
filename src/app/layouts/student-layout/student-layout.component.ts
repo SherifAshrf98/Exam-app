@@ -1,34 +1,86 @@
-import { Component } from '@angular/core';
-import { Router, RouterModule, NavigationEnd } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { NotificationService } from '../../services/notification.service';
+import { NotificationPanelComponent } from '../../shared/notification-panel.component';
+import { StudentService } from '../../services/student.service';
 import { LoginService } from '../../services/login.service';
-import { filter } from 'rxjs';
+import { Student } from '../../shared/student.interfaces';
 
 @Component({
   selector: 'app-student-layout',
   templateUrl: './student-layout.component.html',
-  styleUrls: ['./student-layout.component.css'],
+  styleUrl: './student-layout.component.css',
   standalone: true,
-  imports: [RouterModule]
+  imports: [CommonModule, RouterModule, ToastModule, NotificationPanelComponent],
+  providers: [MessageService]
 })
-export class StudentLayoutComponent {
+export class StudentLayoutComponent implements OnInit, OnDestroy {
   headerTitle = 'Dashboard';
-  userName: string | null = null;
+  studentInfo: Student | null = null;
 
-  constructor(private router: Router, private loginService: LoginService) {
-    this.setHeaderTitle(this.router.url);
-    this.userName = this.loginService.getUserName();
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe((e: any) => {
-      this.setHeaderTitle(e.urlAfterRedirects || e.url);
+  constructor(
+    private router: Router,
+    private messageService: MessageService,
+    private notificationService: NotificationService,
+    private studentService: StudentService,
+    private loginService: LoginService
+  ) {}
+
+  ngOnInit() {
+    // Start SignalR connection
+    this.notificationService.startConnection();
+    
+    // Load student information
+    this.loadStudentInfo();
+    
+    // Set header title based on current route
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.setHeaderTitle(event.url);
+      }
     });
   }
 
-  setHeaderTitle(url: string) {
-    if (url.includes('/student/exams-history')) this.headerTitle = 'Exams History';
-    else if (url.includes('/student/take-exam')) this.headerTitle = 'Take Exam';
-    else this.headerTitle = 'Dashboard';
+  ngOnDestroy() {
+    // Stop SignalR connection when component is destroyed
+    this.notificationService.stopConnection();
   }
 
-  logout() {
+  private setHeaderTitle(url: string): void {
+    if (url.includes('dashboard')) {
+      this.headerTitle = 'Dashboard';
+    } else if (url.includes('take-exam')) {
+      this.headerTitle = 'Take Exam';
+    } else if (url.includes('exams-history')) {
+      this.headerTitle = 'Exam History';
+    } else {
+      this.headerTitle = 'Student Portal';
+    }
+  }
+
+  private loadStudentInfo(): void {
+    const userId = this.loginService.getUserId();
+    if (userId) {
+      this.studentService.getStudentById(userId).subscribe({
+        next: (student) => {
+          this.studentInfo = student;
+        },
+        error: (error) => {
+          console.error('Error loading student info:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load student information'
+          });
+        }
+      });
+    }
+  }
+
+  logout(): void {
     this.loginService.logout();
     this.router.navigate(['/login']);
   }
